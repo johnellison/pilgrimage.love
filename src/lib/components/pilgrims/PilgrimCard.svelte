@@ -19,45 +19,38 @@
 
 <a
 	href="/pilgrims#{pilgrim.id}"
-	class="group block overflow-hidden rounded-lg border border-border bg-card hover:shadow-lg transition-all duration-300"
+	class="group relative aspect-[3/5] cursor-pointer overflow-hidden bg-card reveal-scale rounded-lg"
 >
-	<div class="aspect-[3/4] overflow-hidden bg-sacred-earth-100">
+	<!-- Image Container -->
+	<div class="absolute inset-0 overflow-hidden">
 		{#if !imageError}
 			<img
 				src={pilgrim.image}
 				alt={pilgrim.name}
-				class="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+				class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
 				onerror={() => imageError = true}
 				loading="lazy"
 			/>
 		{:else}
 			<!-- Placeholder with initials if image fails -->
-			<div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-sacred-earth-200 to-ganges-blue-200">
-				<div class="text-6xl font-serif font-bold text-sacred-earth-600">
+			<div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-muted to-card">
+				<div class="text-6xl font-serif font-bold text-muted-foreground">
 					{pilgrim.name.split(' ').map(n => n[0]).join('')}
 				</div>
 			</div>
 		{/if}
 	</div>
 
-	<div class="p-6 space-y-3">
-		<div>
-			<h3 class="text-xl font-serif font-bold text-foreground group-hover:text-saffron-600 transition-colors">
-				{pilgrim.name}
-			</h3>
-			<p class="text-sm text-muted-foreground mt-1">
-				{pilgrim.title}
-			</p>
-		</div>
+	<!-- Gradient Overlay -->
+	<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
 
-		<p class="text-sm text-foreground/70 line-clamp-3">
-			{pilgrim.shortBio}
+	<!-- Content -->
+	<div class="absolute bottom-0 left-0 w-full p-6">
+		<p class="label-uppercase text-primary mb-1">
+			{pilgrim.title}
 		</p>
-
-		<div class="pt-2">
-			<span class="text-sm text-saffron-600 font-medium group-hover:underline">
-				Read their story →
-			</span>
-		</div>
+		<h3 class="text-2xl font-bold text-white">
+			{pilgrim.name}
+		</h3>
 	</div>
 </a>

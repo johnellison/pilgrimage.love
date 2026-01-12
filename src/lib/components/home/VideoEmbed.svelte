@@ -35,16 +35,22 @@
 </script>
 
 {#if hasVideo}
-	<div class="relative aspect-video w-full overflow-hidden rounded-lg bg-sacred-earth-100 shadow-lg">
-		<iframe
-			src={embedUrl}
-			{title}
-			frameborder="0"
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-			allowfullscreen
-			class="absolute inset-0 h-full w-full"
-			loading="lazy"
-		></iframe>
+	<div class="relative group">
+		<!-- Glow Effect -->
+		<div class="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-700"></div>
+
+		<!-- Video Container -->
+		<div class="relative aspect-video w-full overflow-hidden bg-black border border-border shadow-2xl rounded-lg">
+			<iframe
+				src={embedUrl}
+				{title}
+				frameborder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen
+				class="absolute inset-0 h-full w-full"
+				loading="lazy"
+			></iframe>
+		</div>
 	</div>
 {:else}
 	<!-- Placeholder when no video URL is provided -->

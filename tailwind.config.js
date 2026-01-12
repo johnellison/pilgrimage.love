@@ -104,8 +104,11 @@ export default {
 				sm: "calc(var(--radius) - 4px)"
 			},
 			fontFamily: {
-				sans: ['Inter', ...fontFamily.sans],
-				serif: ['Crimson Pro', 'Georgia', ...fontFamily.serif],
+				sans: ['Noto Sans', ...fontFamily.sans],
+				serif: ['Noto Serif', 'Georgia', ...fontFamily.serif],
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 			}
 		}
 	},

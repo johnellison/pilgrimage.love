@@ -16,20 +16,19 @@
 
 <div class="w-full">
 	<div class="text-center mb-4">
-		<div class="text-sm text-muted-foreground mb-2">
-			{formatCurrency(progress.raised)} raised of {formatCurrency(progress.goal)} goal
+		<div class="text-sm font-bold text-foreground mb-3 flex justify-between max-w-md mx-auto">
+			<span>{formatCurrency(progress.raised)} raised</span>
+			<span class="text-muted-foreground">Goal: {formatCurrency(progress.goal)}</span>
 		</div>
-		<div class="relative w-full bg-sacred-earth-200 rounded-full h-4 overflow-hidden">
+		<div class="relative w-full h-2 bg-muted/20 rounded-full overflow-hidden max-w-md mx-auto dark:bg-white/10">
 			<div
-				class="bg-gradient-to-r from-saffron-500 to-saffron-600 h-4 rounded-full transition-all duration-1000 ease-out"
+				class="h-full bg-primary progress-glow transition-all duration-1000 ease-out"
 				style="width: {progress.percentage}%"
 			></div>
-			{#if progress.percentage > 20}
-				<div class="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-					{progress.percentage.toFixed(1)}%
-				</div>
-			{/if}
 		</div>
+		<p class="text-xs text-muted-foreground mt-3 label-uppercase">
+			{progress.percentage.toFixed(0)}% Funded
+		</p>
 	</div>
 
 	{#if !progress.isComplete}
@@ -37,8 +36,8 @@
 			{formatCurrency(progress.remaining)} remaining to reach our goal
 		</p>
 	{:else}
-		<p class="text-sm text-center text-saffron-600 font-medium">
-			🎉 Goal reached! Thank you for your support!
+		<p class="text-sm text-center text-primary font-medium">
+			Goal reached! Thank you for your support!
 		</p>
 	{/if}
 </div>

@@ -53,7 +53,7 @@
 		<button
 			type="submit"
 			disabled={isSubmitting || isSuccess}
-			class="inline-flex items-center justify-center rounded-md bg-saffron-600 px-6 py-3 text-sm font-medium text-white hover:bg-saffron-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors whitespace-nowrap"
+			class="inline-flex items-center justify-center bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors whitespace-nowrap label-uppercase rounded"
 		>
 			{#if isSubmitting}
 				Subscribing...

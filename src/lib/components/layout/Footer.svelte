@@ -2,7 +2,7 @@
 	const navigation = {
 		main: [
 			{ name: 'Home', href: '/' },
-			{ name: 'Characters', href: '/characters' },
+			{ name: 'Pilgrims', href: '/pilgrims' },
 			{ name: 'About', href: '/about' },
 			{ name: 'Shaktipat', href: '/shaktipat' },
 			{ name: 'Press', href: '/press' },
@@ -26,9 +26,7 @@
 			<!-- Brand -->
 			<div class="space-y-4">
 				<div class="flex items-center space-x-3">
-					<div class="h-10 w-10 rounded-full bg-saffron-600 flex items-center justify-center">
-						<span class="text-white font-serif font-bold text-lg">ⵣ</span>
-					</div>
+					<span class="amazigh-symbol text-3xl text-primary">ⵣ</span>
 					<span class="font-serif text-xl font-bold">The Pilgrimage</span>
 				</div>
 				<p class="text-sm text-muted-foreground max-w-sm">
@@ -42,7 +40,7 @@
 					{#each navigation.main as item}
 						<a
 							href={item.href}
-							class="text-sm text-muted-foreground hover:text-foreground transition-colors"
+							class="text-sm text-muted-foreground hover:text-primary transition-colors"
 						>
 							{item.name}
 						</a>
@@ -64,7 +62,7 @@
 						href={item.href}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-muted-foreground hover:text-foreground transition-colors"
+						class="text-muted-foreground hover:text-primary transition-colors"
 					>
 						<span class="sr-only">{item.name}</span>
 						{#if item.icon === 'instagram'}
@@ -79,7 +77,7 @@
 			<!-- Peace organization outreach CTA -->
 			<a
 				href="mailto:hello@pilgrimage.love"
-				class="text-sm text-muted-foreground hover:text-foreground transition-colors"
+				class="text-sm text-muted-foreground hover:text-primary transition-colors"
 			>
 				Peace Organizations: Partner with us →
 			</a>
