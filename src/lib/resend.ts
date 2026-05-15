@@ -1,8 +1,9 @@
 import { Resend } from 'resend';
+import { RESEND_API_KEY } from '$env/static/private';
 
-const resendClient = new Resend(process.env.RESEND_API_KEY);
+const resendClient = new Resend(RESEND_API_KEY);
 
-export const FROM_EMAIL = process.env.FROM_EMAIL || 'The Pilgrimage <hello@pilgrimage.love>';
+export const FROM_EMAIL = 'The Pilgrimage <hello@pilgrimage.love>';
 
 interface EmailPayload {
 	from: string;

@@ -17,8 +17,8 @@
 <div class="w-full">
 	<div class="text-center mb-4">
 		<div class="text-sm font-bold text-foreground mb-3 flex justify-between max-w-md mx-auto">
-			<span>{formatCurrency(progress.raised)} raised</span>
-			<span class="text-muted-foreground">Goal: {formatCurrency(progress.goal)}</span>
+			<span>{formatCurrency(progress.currentlyRaised)} raised</span>
+			<span class="text-muted-foreground">Goal: {formatCurrency(progress.ask)}</span>
 		</div>
 		<div class="relative w-full h-2 bg-muted/20 rounded-full overflow-hidden max-w-md mx-auto dark:bg-white/10">
 			<div

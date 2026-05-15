@@ -23,11 +23,11 @@ export const POST: RequestHandler = async ({ request }) => {
 					price_data: {
 						currency: 'usd',
 						product_data: {
-							name: 'Support The Pilgrimage',
+							name: "Pilgrimage — Ganga's Grace",
 							description: recurring
-								? 'Monthly donation to The Pilgrimage documentary'
-								: 'One-time donation to The Pilgrimage documentary',
-							images: [`${PUBLIC_SITE_URL}/images/og-image.jpg`],
+								? 'Monthly support for Pilgrimage, a documentary about the Mahakumbh Mela. Fiscally sponsored by The Fountain (501c3).'
+								: "One-time gift to Pilgrimage — Ganga's Grace. Fiscally sponsored by The Fountain (501c3).",
+							images: [`${PUBLIC_SITE_URL}/images/hero.jpg`],
 						},
 						unit_amount: amount,
 						...(recurring && {
@@ -40,6 +40,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				},
 			],
 			mode: recurring ? 'subscription' : 'payment',
+			billing_address_collection: 'auto',
 			success_url: `${PUBLIC_SITE_URL}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${PUBLIC_SITE_URL}/donate`,
 			metadata: {

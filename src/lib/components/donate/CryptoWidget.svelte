@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import { PUBLIC_CRYPTO_WALLET_ETH, PUBLIC_CRYPTO_WALLET_BTC } from '$env/static/public';
+	import { PUBLIC_CRYPTO_WALLET_ETH } from '$env/static/public';
 
 	interface Props {
 		type: 'eth' | 'btc';
@@ -8,7 +8,7 @@
 
 	let { type }: Props = $props();
 
-	const walletAddress = $derived(type === 'eth' ? PUBLIC_CRYPTO_WALLET_ETH : PUBLIC_CRYPTO_WALLET_BTC);
+	const walletAddress = $derived(type === 'eth' ? PUBLIC_CRYPTO_WALLET_ETH : '');
 	const cryptoName = $derived(type === 'eth' ? 'Ethereum' : 'Bitcoin');
 	const shortAddress = $derived(walletAddress ? `${walletAddress.slice(0, 8)}...${walletAddress.slice(-6)}` : '');
 

@@ -21,3 +21,8 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Local back-office, notes, and AI memory — not part of the website
+back-office/
+docs/
+.claude/

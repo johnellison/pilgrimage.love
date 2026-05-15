@@ -2,166 +2,349 @@
 	import { siteConfig } from '$lib/config/site';
 	import { toast } from 'svelte-sonner';
 
-	let selectedAmount = $state<number | null>(null);
+	type Track = 'community' | 'major';
+
+	let track = $state<Track>('community');
+	let selectedSmall = $state<number | null>(null);
 	let customAmount = $state('');
 	let isRecurring = $state(false);
 	let isSubmitting = $state(false);
 
-	const tiers = siteConfig.donationTiers;
+	const smallTiers = siteConfig.donationTiersSmall;
+	const largeTiers = siteConfig.donationTiersLarge;
 
-	async function handleDonate() {
-		const amount = selectedAmount || parseFloat(customAmount);
+	function selectSmall(amount: number) {
+		selectedSmall = amount;
+		customAmount = '';
+	}
 
-		if (!amount || amount < 1) {
+	function handleCustomChange(e: Event) {
+		customAmount = (e.target as HTMLInputElement).value;
+		if (customAmount) selectedSmall = null;
+	}
+
+	async function handleDonate(amountDollars?: number) {
+		const dollars = amountDollars ?? selectedSmall ?? parseFloat(customAmount);
+		if (!dollars || dollars < 1) {
 			toast.error('Please select or enter a donation amount');
 			return;
 		}
-
 		isSubmitting = true;
-
 		try {
-			const response = await fetch('/api/stripe/checkout', {
+			const res = await fetch('/api/stripe/checkout', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					amount: Math.round(amount * 100), // Convert to cents
-					recurring: isRecurring
-				})
+				body: JSON.stringify({ amount: Math.round(dollars * 100), recurring: isRecurring })
 			});
-
-			const data = await response.json();
-
-			if (response.ok && data.url) {
-				// Redirect to Stripe Checkout
+			const data = await res.json();
+			if (res.ok && data.url) {
 				window.location.href = data.url;
 			} else {
 				toast.error(data.message || 'Failed to process donation');
 			}
-		} catch (error) {
+		} catch {
 			toast.error('Something went wrong. Please try again.');
-			console.error('Donation error:', error);
 		} finally {
 			isSubmitting = false;
 		}
 	}
-
-	function selectAmount(amount: number) {
-		selectedAmount = amount;
-		customAmount = '';
-	}
-
-	function handleCustomAmountChange(e: Event) {
-		const input = e.target as HTMLInputElement;
-		customAmount = input.value;
-		if (customAmount) {
-			selectedAmount = null;
-		}
-	}
 </script>
 
-<div class="space-y-6">
-	<!-- Preset Amounts -->
-	<div>
-		<label class="block text-sm font-medium text-foreground mb-3">
-			Select Amount
-		</label>
-		<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-			{#each tiers as tier}
+<!-- Track Toggle -->
+<div
+	style="
+		display: flex;
+		border: 1px solid rgba(255,255,255,0.08);
+		border-radius: 4px;
+		overflow: hidden;
+		margin-bottom: 36px;
+	"
+>
+	<button
+		type="button"
+		onclick={() => { track = 'community'; selectedSmall = null; customAmount = ''; }}
+		style="
+			flex: 1;
+			padding: 12px;
+			font-family: 'Noto Sans', sans-serif;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.15em;
+			text-transform: uppercase;
+			border: none;
+			cursor: pointer;
+			transition: background 0.25s ease, color 0.25s ease;
+			background: {track === 'community' ? '#FACC61' : 'transparent'};
+			color: {track === 'community' ? '#1E1E1E' : '#8A867C'};
+		"
+	>Community Gift</button>
+	<button
+		type="button"
+		onclick={() => { track = 'major'; selectedSmall = null; customAmount = ''; }}
+		style="
+			flex: 1;
+			padding: 12px;
+			font-family: 'Noto Sans', sans-serif;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.15em;
+			text-transform: uppercase;
+			border: none;
+			border-left: 1px solid rgba(255,255,255,0.08);
+			cursor: pointer;
+			transition: background 0.25s ease, color 0.25s ease;
+			background: {track === 'major' ? '#FACC61' : 'transparent'};
+			color: {track === 'major' ? '#1E1E1E' : '#8A867C'};
+		"
+	>Major Gift</button>
+</div>
+
+{#if track === 'community'}
+	<!-- Community track: preset amounts + custom -->
+	<div style="margin-bottom: 28px;">
+		<div
+			style="
+				font-family: 'Noto Sans', sans-serif;
+				font-size: 10px;
+				font-weight: 700;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: #8A867C;
+				margin-bottom: 14px;
+			"
+		>Select Amount</div>
+
+		<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px;">
+			{#each smallTiers as tier}
 				<button
 					type="button"
-					onclick={() => selectAmount(tier.amount)}
-					class="relative rounded-lg border-2 p-4 text-center transition-all {selectedAmount === tier.amount ? 'border-saffron-600 bg-saffron-50' : 'border-border hover:border-saffron-300'}"
+					onclick={() => selectSmall(tier.amount)}
 					disabled={isSubmitting}
+					style="
+						position: relative;
+						padding: 16px 12px;
+						text-align: center;
+						border: 1px solid {selectedSmall === tier.amount ? '#FACC61' : 'rgba(255,255,255,0.1)'};
+						background: {selectedSmall === tier.amount ? 'rgba(250,204,97,0.08)' : 'transparent'};
+						border-radius: 4px;
+						cursor: pointer;
+						transition: border-color 0.2s, background 0.2s;
+					"
 				>
-					<div class="text-2xl font-bold text-foreground">{tier.label}</div>
-					{#if selectedAmount === tier.amount}
-						<div class="absolute top-2 right-2 text-saffron-600">
-							<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-								<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-							</svg>
+					<div
+						style="
+							font-family: 'Noto Serif', Georgia, serif;
+							font-size: 22px;
+							font-weight: 700;
+							color: {selectedSmall === tier.amount ? '#FACC61' : '#F5F3EC'};
+						"
+					>{tier.label}</div>
+					{#if selectedSmall === tier.amount && tier.benefits.length}
+						<div style="margin-top: 8px; font-size: 11px; color: #8A867C; line-height: 1.4;">
+							{tier.benefits[0]}
 						</div>
 					{/if}
 				</button>
 			{/each}
 		</div>
-	</div>
 
-	<!-- Custom Amount -->
-	<div>
-		<label for="custom-amount" class="block text-sm font-medium text-foreground mb-2">
-			Or Enter Custom Amount
-		</label>
-		<div class="relative">
-			<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-				<span class="text-muted-foreground sm:text-sm">$</span>
-			</div>
+		<!-- Custom amount -->
+		<div style="position: relative;">
+			<span
+				style="
+					position: absolute;
+					left: 14px;
+					top: 50%;
+					transform: translateY(-50%);
+					font-family: 'Noto Sans', sans-serif;
+					font-size: 14px;
+					color: #8A867C;
+				"
+			>$</span>
 			<input
-				id="custom-amount"
 				type="number"
 				min="1"
 				step="1"
-				bind:value={customAmount}
-				oninput={handleCustomAmountChange}
-				placeholder="Enter amount"
+				value={customAmount}
+				oninput={handleCustomChange}
+				placeholder="Custom amount"
 				disabled={isSubmitting}
-				class="block w-full rounded-md border border-input bg-background py-3 pl-7 pr-12 text-foreground placeholder:text-muted-foreground focus:border-saffron-600 focus:outline-none focus:ring-1 focus:ring-saffron-600 disabled:cursor-not-allowed disabled:opacity-50"
+				style="
+					width: 100%;
+					padding: 14px 14px 14px 28px;
+					background: transparent;
+					border: 1px solid rgba(255,255,255,0.1);
+					border-radius: 4px;
+					font-family: 'Noto Serif', Georgia, serif;
+					font-size: 16px;
+					color: #F5F3EC;
+					outline: none;
+					transition: border-color 0.2s;
+				"
+				onfocus={(e) => { (e.target as HTMLInputElement).style.borderColor = 'rgba(250,204,97,0.4)'; }}
+				onblur={(e) => { (e.target as HTMLInputElement).style.borderColor = 'rgba(255,255,255,0.1)'; }}
 			/>
-			<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-				<span class="text-muted-foreground sm:text-sm">USD</span>
-			</div>
 		</div>
 	</div>
 
-	<!-- Recurring Option -->
-	<div class="flex items-center gap-3">
+	<!-- Recurring toggle -->
+	<label
+		style="
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			cursor: pointer;
+			margin-bottom: 28px;
+		"
+	>
 		<input
-			id="recurring"
 			type="checkbox"
 			bind:checked={isRecurring}
 			disabled={isSubmitting}
-			class="h-4 w-4 rounded border-gray-300 text-saffron-600 focus:ring-saffron-600"
+			style="width: 16px; height: 16px; accent-color: #FACC61; cursor: pointer;"
 		/>
-		<label for="recurring" class="text-sm text-foreground cursor-pointer">
-			Make this a monthly recurring donation
-		</label>
-	</div>
+		<span style="font-family:'Noto Sans',sans-serif; font-size:13px; color:#C9C5B8;">
+			Make this a monthly recurring gift
+		</span>
+	</label>
 
-	<!-- Benefits Display -->
-	{#if selectedAmount}
-		{@const selectedTier = tiers.find(t => t.amount === selectedAmount)}
-		{#if selectedTier && selectedTier.benefits.length > 0}
-			<div class="rounded-lg border border-saffron-200 bg-saffron-50 p-4">
-				<h4 class="text-sm font-semibold text-saffron-900 mb-2">Your Benefits:</h4>
-				<ul class="space-y-1">
-					{#each selectedTier.benefits as benefit}
-						<li class="text-sm text-saffron-800 flex items-start gap-2">
-							<svg class="w-4 h-4 text-saffron-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-								<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-							</svg>
-							{benefit}
-						</li>
-					{/each}
-				</ul>
-			</div>
-		{/if}
-	{/if}
-
-	<!-- Donate Button -->
+	<!-- Donate button -->
 	<button
 		type="button"
-		onclick={handleDonate}
-		disabled={isSubmitting || (!selectedAmount && !customAmount)}
-		class="w-full rounded-md bg-saffron-600 px-6 py-4 text-base font-semibold text-white hover:bg-saffron-700 focus:outline-none focus:ring-2 focus:ring-saffron-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+		onclick={() => handleDonate()}
+		disabled={isSubmitting || (!selectedSmall && !customAmount)}
+		style="
+			width: 100%;
+			height: 52px;
+			background: #FACC61;
+			font-family: 'Noto Sans', sans-serif;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+			color: #1E1E1E;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			transition: background 0.2s;
+			opacity: {isSubmitting || (!selectedSmall && !customAmount) ? '0.45' : '1'};
+		"
+		onmouseenter={(e) => { if (!(e.currentTarget as HTMLButtonElement).disabled) (e.currentTarget as HTMLElement).style.background = '#f5c040'; }}
+		onmouseleave={(e) => { (e.currentTarget as HTMLElement).style.background = '#FACC61'; }}
 	>
 		{#if isSubmitting}
-			Processing...
+			Processing…
 		{:else}
-			Donate {selectedAmount ? `$${selectedAmount}` : customAmount ? `$${customAmount}` : ''}
+			Donate {selectedSmall ? `$${selectedSmall.toLocaleString()}` : customAmount ? `$${parseFloat(customAmount).toLocaleString()}` : ''}
 			{isRecurring ? '/month' : ''}
 		{/if}
 	</button>
 
-	<p class="text-xs text-center text-muted-foreground">
-		Secure payment powered by Stripe. 33% of profits support wisdom keepers.
+{:else}
+	<!-- Major gift track: tier cards -->
+	<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px;" class="tier-grid">
+		{#each largeTiers as tier}
+			<div
+				style="
+					background: {tier.featured ? 'rgba(250,204,97,0.06)' : 'transparent'};
+					border: 1px solid {tier.featured ? 'rgba(250,204,97,0.35)' : 'rgba(255,255,255,0.08)'};
+					border-radius: 4px;
+					padding: 24px 20px;
+					display: flex;
+					flex-direction: column;
+					gap: 10px;
+				"
+			>
+				<div style="font-family:'Noto Sans',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#FACC61;">{tier.name}</div>
+				<div style="font-family:'Noto Serif',Georgia,serif; font-size:22px; font-weight:700; color:#F5F3EC;">{tier.range}</div>
+				<p style="font-size:13px; color:#C9C5B8; line-height:1.6; font-weight:300; flex:1;">{tier.benefits}</p>
+
+				{#if tier.isDaf}
+					<a
+						href="mailto:{siteConfig.contact.john}?subject=DAF Recommendation — Pilgrimage"
+						style="
+							display: inline-flex;
+							align-items: center;
+							justify-content: center;
+							height: 40px;
+							padding: 0 16px;
+							border: 1px solid rgba(250,204,97,0.3);
+							font-family: 'Noto Sans', sans-serif;
+							font-size: 10px;
+							font-weight: 700;
+							letter-spacing: 0.15em;
+							text-transform: uppercase;
+							color: #FACC61;
+							text-decoration: none;
+							border-radius: 4px;
+							transition: background 0.2s;
+						"
+					>Contact John</a>
+				{:else if tier.amountCents >= 2500000}
+					<a
+						href="mailto:{siteConfig.contact.john}?subject=Executive Producer — Pilgrimage"
+						style="
+							display: inline-flex;
+							align-items: center;
+							justify-content: center;
+							height: 40px;
+							padding: 0 16px;
+							background: #FACC61;
+							font-family: 'Noto Sans', sans-serif;
+							font-size: 10px;
+							font-weight: 700;
+							letter-spacing: 0.15em;
+							text-transform: uppercase;
+							color: #1E1E1E;
+							text-decoration: none;
+							border-radius: 4px;
+							transition: background 0.2s;
+						"
+					>Contact John</a>
+				{:else}
+					<button
+						type="button"
+						onclick={() => handleDonate(tier.amountCents / 100)}
+						disabled={isSubmitting}
+						style="
+							height: 40px;
+							padding: 0 16px;
+							background: transparent;
+							border: 1px solid rgba(250,204,97,0.3);
+							font-family: 'Noto Sans', sans-serif;
+							font-size: 10px;
+							font-weight: 700;
+							letter-spacing: 0.15em;
+							text-transform: uppercase;
+							color: #FACC61;
+							border-radius: 4px;
+							cursor: pointer;
+							transition: background 0.2s, color 0.2s;
+						"
+						onmouseenter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(250,204,97,0.1)'; }}
+						onmouseleave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+					>
+						{isSubmitting ? 'Processing…' : 'Donate via Stripe'}
+					</button>
+				{/if}
+			</div>
+		{/each}
+	</div>
+
+	<p style="font-family:'Noto Sans',sans-serif; font-size:12px; color:#8A867C; text-align:center; line-height:1.7;">
+		For gifts over $5,000 or DAF recommendations, we recommend connecting directly.<br />
+		<a href="mailto:{siteConfig.contact.john}" style="color:#FACC61; text-decoration:none;">{siteConfig.contact.john}</a>
 	</p>
-</div>
+{/if}
+
+<p style="margin-top: 20px; font-family:'Noto Sans',sans-serif; font-size:11px; text-align:center; color:#8A867C; letter-spacing:0.05em;">
+	Secure payment via Stripe · Fiscally sponsored by The Fountain (501c3)
+</p>
+
+<style>
+	@media (max-width: 480px) {
+		.tier-grid {
+			grid-template-columns: 1fr !important;
+		}
+	}
+</style>

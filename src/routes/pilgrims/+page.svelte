@@ -42,8 +42,9 @@
 										alt={pilgrim.name}
 										class="h-full w-full object-cover object-center"
 										onerror={(e) => {
-											e.currentTarget.style.display = 'none';
-											e.currentTarget.parentElement.innerHTML = `
+											const img = e.currentTarget as HTMLImageElement;
+											img.style.display = 'none';
+											if (img.parentElement) img.parentElement.innerHTML = `
 												<div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-sacred-earth-200 to-ganges-blue-200">
 													<div class="text-6xl font-serif font-bold text-sacred-earth-600">
 														${pilgrim.name.split(' ').map(n => n[0]).join('')}

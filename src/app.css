@@ -36,6 +36,19 @@
 		--input: 44 18% 90%;
 		--ring: 43 95% 68%;
 		--radius: 0.25rem; /* 4px - following Nano Banana design */
+
+		/* Deck-aligned hex tokens for cinematic sections */
+		--gold-hex: #FACC61;
+		--gold-soft-hex: rgba(250, 204, 97, 0.4);
+		--gold-line-hex: rgba(250, 204, 97, 0.25);
+		--green-hex: #6DC98A;
+		--green-line-hex: rgba(109, 201, 138, 0.28);
+		--terracotta-hex: #E07A5F;
+		--fg-cream: #F5F3EC;
+		--fg-soft-hex: #C9C5B8;
+		--fg-muted-hex: #8A867C;
+		--bg-card-hex: #252525;
+		--border-hex: rgba(255, 255, 255, 0.08);
 	}
 
 	.dark {
@@ -504,4 +517,100 @@
 
 .dark .section-light-alt {
 	background: hsl(0 0% 15%); /* #252525 */
+}
+
+/* Gradient sacred - used in donate page */
+.bg-gradient-sacred {
+	background: linear-gradient(135deg, hsl(0 0% 13%) 0%, hsl(0 0% 15%) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ============================================
+   CINEMATIC SECTION UTILITIES (deck-aligned)
+   ============================================ */
+
+/* Full-bleed hero background */
+.hero-bg {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	background-size: cover;
+	background-position: center;
+}
+
+/* Radial vignette overlay */
+.hero-vignette {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	background: radial-gradient(
+		circle at center,
+		rgba(0, 0, 0, 0) 0%,
+		rgba(0, 0, 0, 0.5) 65%,
+		rgba(0, 0, 0, 0.85) 100%
+	);
+}
+
+/* Content layer above hero-bg / hero-vignette */
+.hero-content {
+	position: relative;
+	z-index: 1;
+}
+
+/* Pilgrim taxonomy pills */
+.pilgrim-pill {
+	font-family: 'Noto Sans', sans-serif;
+	font-size: 10px;
+	font-weight: 500;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: #b5b0a7;
+	padding: 8px 20px;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	border-radius: 1px;
+	transition: color 0.4s ease, border-color 0.4s ease;
+	cursor: default;
+}
+
+.pilgrim-pill:hover {
+	color: #facc61;
+	border-color: rgba(250, 204, 97, 0.38);
+}
+
+/* Cinematic deck-style label */
+.deck-label {
+	font-family: 'Noto Sans', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: #facc61;
+	margin-bottom: 18px;
+	display: block;
+}
+
+/* Subtitle italic */
+.subtitle-italic {
+	font-family: 'Noto Serif', Georgia, serif;
+	font-style: italic;
+	font-weight: 400;
+	color: #c9c5b8;
+}
+
+/* Team portrait circle */
+.team-portrait-circle {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	border-radius: 50%;
+	overflow: hidden;
+	background: #252525;
+	border: 2px solid rgba(250, 204, 97, 0.25);
+	margin-bottom: 14px;
+}
+
+.team-portrait-circle img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	filter: sepia(0.2) contrast(1.05);
 }
