@@ -337,13 +337,94 @@
 	</p>
 {/if}
 
-<p style="margin-top: 20px; font-family:'Noto Sans',sans-serif; font-size:11px; text-align:center; color:#8A867C; letter-spacing:0.05em;">
+<!-- Direct transfer options -->
+<div style="margin-top: 32px;">
+	<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+		<div style="flex: 1; height: 1px; background: rgba(255,255,255,0.08);"></div>
+		<span style="font-family:'Noto Sans',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:#8A867C; white-space:nowrap;">Or transfer directly</span>
+		<div style="flex: 1; height: 1px; background: rgba(255,255,255,0.08);"></div>
+	</div>
+
+	<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;" class="transfer-grid">
+		<a
+			href="https://wise.com/pay/me/johne258"
+			target="_blank"
+			rel="noopener noreferrer"
+			style="
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				height: 48px;
+				border: 1px solid rgba(105,198,140,0.35);
+				border-radius: 4px;
+				font-family: 'Noto Sans', sans-serif;
+				font-size: 11px;
+				font-weight: 700;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				color: #69C68C;
+				text-decoration: none;
+				transition: background 0.2s, border-color 0.2s;
+			"
+			onmouseenter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(105,198,140,0.08)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(105,198,140,0.6)'; }}
+			onmouseleave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(105,198,140,0.35)'; }}
+		>
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="none"/>
+				<path d="M3 10h18M3 14h18M12 3a9 9 0 0 1 0 18A9 9 0 0 1 12 3z" stroke="#69C68C" stroke-width="1.5" stroke-linecap="round"/>
+				<path d="M12 3c-2 2.5-3 5.5-3 9s1 6.5 3 9M12 3c2 2.5 3 5.5 3 9s-1 6.5-3 9" stroke="#69C68C" stroke-width="1.5" stroke-linecap="round"/>
+			</svg>
+			Wise
+		</a>
+
+		<a
+			href="https://revolut.me/iamjohndass"
+			target="_blank"
+			rel="noopener noreferrer"
+			style="
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				height: 48px;
+				border: 1px solid rgba(130,140,255,0.35);
+				border-radius: 4px;
+				font-family: 'Noto Sans', sans-serif;
+				font-size: 11px;
+				font-weight: 700;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				color: #8A8CFF;
+				text-decoration: none;
+				transition: background 0.2s, border-color 0.2s;
+			"
+			onmouseenter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(130,140,255,0.08)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(130,140,255,0.6)'; }}
+			onmouseleave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(130,140,255,0.35)'; }}
+		>
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<rect x="3" y="3" width="18" height="18" rx="5" stroke="#8A8CFF" stroke-width="1.5"/>
+				<path d="M8 12h8M12 8v8" stroke="#8A8CFF" stroke-width="1.5" stroke-linecap="round"/>
+			</svg>
+			Revolut
+		</a>
+	</div>
+
+	<p style="margin-top: 12px; font-family:'Noto Sans',sans-serif; font-size:11px; text-align:center; color:#8A867C; letter-spacing:0.05em;">
+		Direct transfers land straight in the production budget
+	</p>
+</div>
+
+<p style="margin-top: 16px; font-family:'Noto Sans',sans-serif; font-size:11px; text-align:center; color:#8A867C; letter-spacing:0.05em;">
 	Secure payment via Stripe · Fiscally sponsored by The Fountain (501c3)
 </p>
 
 <style>
 	@media (max-width: 480px) {
 		.tier-grid {
+			grid-template-columns: 1fr !important;
+		}
+		.transfer-grid {
 			grid-template-columns: 1fr !important;
 		}
 	}
