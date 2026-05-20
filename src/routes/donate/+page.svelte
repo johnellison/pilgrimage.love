@@ -8,7 +8,7 @@
 	<title>Support — {siteConfig.name}</title>
 	<meta
 		name="description"
-		content="Help us finish Pilgrimage — Ganga's Grace. $16,000 to complete post-production. Fiscally sponsored by The Fountain (501c3)."
+		content="Help us finish Pilgrimage — Ganga's Grace. $13,747 still needed to complete post-production. Fiscally sponsored by The Fountain (501c3)."
 	/>
 </svelte:head>
 
@@ -76,8 +76,10 @@
 				<p style="font-size:13px; color:#C9C5B8; line-height:1.7; font-weight:300; margin-bottom:12px;">
 					Final edit, colour &amp; sound, additional interview filming, Massi's direction and production, and an original score.
 				</p>
-				<div style="font-family:'Noto Serif',Georgia,serif; font-size:36px; font-weight:700; color:#FACC61; letter-spacing:-0.02em;">$16,000</div>
-				<div style="font-family:'Noto Sans',sans-serif; font-size:11px; color:#8A867C; letter-spacing:0.1em; text-transform:uppercase; margin-top:4px;">to finish the film</div>
+				<div style="font-family:'Noto Serif',Georgia,serif; font-size:22px; font-weight:400; color:#8A867C; letter-spacing:-0.01em; margin-bottom:4px;">$16,000 needed</div>
+				<div style="font-family:'Noto Sans',sans-serif; font-size:11px; color:#6DC98A; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px;">✓ $2,253 secured via Chuffed</div>
+				<div style="font-family:'Noto Serif',Georgia,serif; font-size:36px; font-weight:700; color:#FACC61; letter-spacing:-0.02em;">$13,747</div>
+				<div style="font-family:'Noto Sans',sans-serif; font-size:11px; color:#8A867C; letter-spacing:0.1em; text-transform:uppercase; margin-top:4px;">still needed to finish</div>
 			</div>
 		</div>
 	</div>

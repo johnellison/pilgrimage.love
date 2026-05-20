@@ -21,6 +21,7 @@ export const siteConfig = {
 	fundraising: {
 		raised: 45570,
 		ask: 16000,
+		chuffedSecured: 2253,
 		ambitious: 35000,
 		currency: 'USD',
 		fiscalHost: 'The Fountain',
@@ -210,10 +211,10 @@ export const siteConfig = {
 	]
 };
 
-// Progress toward the current $16K ask (starts at 0, updated as donations arrive)
+// Progress toward the current $16K ask — Chuffed community fundraising counts as secured
 export function getFundingProgress() {
-	const { ask } = siteConfig.fundraising;
-	const currentlyRaised = 0;
+	const { ask, chuffedSecured } = siteConfig.fundraising;
+	const currentlyRaised = chuffedSecured;
 	return {
 		ask,
 		currentlyRaised,

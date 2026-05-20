@@ -515,8 +515,16 @@
 						</tr>
 					{/each}
 					<tr>
-						<td style="padding: 16px 0 12px; font-size: 17px; font-weight: 700; color: #FACC61; letter-spacing: -0.01em;">To finish the film</td>
-						<td style="padding: 16px 0 12px; text-align: right; font-family: 'Noto Serif', Georgia, serif; font-weight: 700; color: #FACC61; font-size: 28px; letter-spacing: -0.02em;">$16,000</td>
+						<td style="padding: 16px 0 6px; font-size: 13px; color: #8A867C;">Total needed</td>
+						<td style="padding: 16px 0 6px; text-align: right; font-family: 'Noto Serif', Georgia, serif; color: #8A867C; font-size: 14px;">$16,000</td>
+					</tr>
+					<tr>
+						<td style="padding: 6px 0; font-size: 13px; color: #6DC98A;">✓ Secured (Chuffed community)</td>
+						<td style="padding: 6px 0; text-align: right; font-family: 'Noto Serif', Georgia, serif; color: #6DC98A; font-size: 14px;">−$2,253</td>
+					</tr>
+					<tr>
+						<td style="padding: 10px 0 12px; font-size: 17px; font-weight: 700; color: #FACC61; letter-spacing: -0.01em;">Still needed</td>
+						<td style="padding: 10px 0 12px; text-align: right; font-family: 'Noto Serif', Georgia, serif; font-weight: 700; color: #FACC61; font-size: 28px; letter-spacing: -0.02em;">$13,747</td>
 					</tr>
 					</tbody>
 				</table>
