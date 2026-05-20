@@ -314,8 +314,7 @@
 					margin-bottom: 36px;
 				"
 			>
-				Not a feeling.<br>A force.<br>
-				<span style="color: #FACC61;">Love.</span>
+				<span style="color: #FACC61;">Love is the force that unites all.</span>
 			</div>
 
 			<p
