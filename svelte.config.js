@@ -10,7 +10,7 @@ const config = {
 	kit: {
 		adapter: adapter({
 			// Vercel adapter options
-			runtime: 'nodejs20.x',
+			runtime: 'nodejs22.x', // Node 20 is EOL and lacks tls.setDefaultCACertificates (eMudhra trust guard)
 			regions: ['iad1'], // US East for global reach
 		})
 	}
