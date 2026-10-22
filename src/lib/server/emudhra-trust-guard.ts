@@ -16,8 +16,9 @@ import { X509Certificate } from 'node:crypto';
 const PATCHED: Record<number, [number, number]> = { 22: [23, 4], 24: [22, 1], 26: [12, 1] };
 let applied = false;
 
-// Every emSign root (eMudhra). Mozilla has distrusted eMudhra outright, so a legitimate emSign-only
-// site failing is the accepted cost; the Sectigo cross-sign path is already absent from Node's store.
+// Every emSign root (eMudhra) — a superset of upstream, whose patched Node drops G3/C1/C3 and keeps G1.
+// A legitimate emSign-only site failing is the accepted cost; the Sectigo cross-sign path (AAA
+// Certificate Services) is already absent from Node's store and from Vercel's.
 export function withoutEmsignRoots(roots: string[]): string[] {
 	return roots.filter((pem) => !/\bCN=emSign\b/.test(new X509Certificate(pem).subject.replace(/\n/g, ',')));
 }
@@ -25,18 +26,23 @@ export function withoutEmsignRoots(roots: string[]): string[] {
 export function applyEmudhraTrustGuard(): void {
 	if (applied) return;
 	applied = true;
-	const [major, minor, patch] = process.versions.node.split('.').map(Number);
-	const floor = PATCHED[major];
-	if (floor && (minor > floor[0] || (minor === floor[0] && patch >= floor[1]))) return;
-	const t = tls as typeof tls & {
-		getCACertificates?: (type?: string) => string[];
-		setDefaultCACertificates?: (certs: string[]) => void;
-	};
-	if (!t.getCACertificates || !t.setDefaultCACertificates) {
-		console.warn(`[emudhra-trust-guard] node ${process.version} cannot reset its CA store; upgrade Node`);
-		return;
+	try {
+		const [major, minor, patch] = process.versions.node.split('.').map(Number);
+		const floor = PATCHED[major];
+		if (floor && (minor > floor[0] || (minor === floor[0] && patch >= floor[1]))) return;
+		const t = tls as typeof tls & {
+			getCACertificates?: (type?: string) => string[];
+			setDefaultCACertificates?: (certs: string[]) => void;
+		};
+		if (!t.getCACertificates || !t.setDefaultCACertificates) {
+			console.warn(`[emudhra-trust-guard] node ${process.version} cannot reset its CA store; upgrade Node`);
+			return;
+		}
+		const roots = t.getCACertificates('default');
+		const kept = withoutEmsignRoots(roots);
+		if (kept.length !== roots.length) t.setDefaultCACertificates(kept);
+	} catch (err) {
+		// Never take the server down over this: log and keep the runtime's default store.
+		console.error('[emudhra-trust-guard] failed; CA store unchanged:', err);
 	}
-	const roots = t.getCACertificates('default');
-	const kept = withoutEmsignRoots(roots);
-	if (kept.length !== roots.length) t.setDefaultCACertificates(kept);
 }
